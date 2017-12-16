@@ -1,18 +1,22 @@
 const {Transform} = require('stream');
+const noop = () => {};
 
-const STATE = Symbol('state');
-const STATE_OPEN = 0;
-const STATE_CLOSE = 1;
+const ON_FLUSH = Symbol('onFlush');
+const IS_RUNNING = Symbol('isRunning');
+const TURN = Symbol('turn');
+const FLUSH = Symbol('flush');
+const BUFFER = Symbol('buffer');
+const FLUSH_CALLBACK = Symbol('flushCallback');
 
 module.exports = class Tap extends Transform {
 
-	constructor(taps) {
+	constructor({isRunning = false, onFlush = noop} = {}) {
 		Object.assign(
 			super(),
 			{
-				taps,
-				buffer: [],
-				[STATE]: STATE_CLOSE,
+				[BUFFER]: [],
+				[IS_RUNNING]: isRunning,
+				[ON_FLUSH]: onFlush,
 			}
 		)
 		.on('pipe', ({_readableState: {objectMode}}) => {
@@ -21,46 +25,54 @@ module.exports = class Tap extends Transform {
 		});
 	}
 
-
-	get isOpened() {
-		return this[STATE] === STATE_OPEN;
+	get isRunning() {
+		return this[IS_RUNNING];
 	}
 
-	get isClosed() {
-		return this[STATE] === STATE_CLOSE;
+	get receivesNoMoreData() {
+		return Boolean(this[FLUSH_CALLBACK]);
 	}
 
 	_transform(chunk, encoding, callback) {
-		if (this.isClosed) {
-			this.buffer.push(chunk);
-		} else {
+		if (this.isRunning) {
 			this.push(chunk);
+		} else {
+			this[BUFFER].push(chunk);
 		}
 		callback();
 	}
 
-	_flush(onEnd) {
-		if (this.isClosed) {
-			this.onEnd = onEnd;
-			this.taps.onReady(this);
-		} else {
-			onEnd();
+	_flush(callback) {
+		this[FLUSH_CALLBACK] = callback;
+		if (this.isRunning) {
+			this[FLUSH]();
+		}
+		this[ON_FLUSH](this);
+	}
+
+	[FLUSH]() {
+		while (0 < this[BUFFER].length) {
+			this.push(this[BUFFER].shift());
+		}
+		if (this[FLUSH_CALLBACK]) {
+			this[FLUSH_CALLBACK]();
+			this[FLUSH_CALLBACK] = noop;
 		}
 	}
 
-	open() {
-		this[STATE] = STATE_OPEN;
-		while (0 < this.buffer.length) {
-			this.push(this.buffer.shift());
-		}
-		if (this.onEnd) {
-			this.onEnd();
-			delete this.onEnd;
+	[TURN](state) {
+		this[IS_RUNNING] = state;
+		if (state) {
+			this[FLUSH]();
 		}
 	}
 
-	close() {
-		this[STATE] = STATE_CLOSE;
+	turnOn() {
+		this[TURN](true);
+	}
+
+	turnOff() {
+		this[TURN](false);
 	}
 
 };

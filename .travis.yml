@@ -13,3 +13,11 @@ script:
 after_success:
 - npm install -g codecov
 - codecov
+deploy:
+  provider: npm
+  email: kei.itof@gmail.com
+  api_key:
+    secure: Ax3MWbyBkPRkPtt2qkVd5taCBmoA1SzRjhD6jH9S1GF9HpgJudV465sZ1cnZfaiRnvNDX8dW0oRtFCtAHm6U0IoFuON3v+Mojoahrjl8SiHv833bawoB+N0PNrMoXwc6AvrYH0s+NvoZh6Z8/ZfLY+C/eTmP8cIdc7KTklsej+LI5d7n1BKk1+UPAW1Zq2kMp1jQ5V8dxtKvk1IWaEC5mt+ywpj4I3+HqehNvruT6ELEKxJas5iKsP9Uq/MHSw09aFPzu5RYEB++qSJ5+jzCc1pUDDRx7pisXMeYgrOkUq5aSKzxBo06Ghy6bilrhgMc/wA04WzO1gnH9Mp5DlfGxHviGK6LdquNgzmmAWx3wCfzbLavMKm61FD50Aba5BBn5+sEqfgyQNG6zikbF6rayxunxkCJDDOWO4fHLU5IDMc0VbLFxccYYwqM/fNDAOmiEnl07zRYfj3m4GdYmxd4Mh3gkVcU3Zk7oXypgXFWiYdjfq+rXCKnt4AbVu7slAeOFoDwfLCpNmjT27sUcwrPBahsipHiojzO2UszHPg12iY381ZhqRJJU+L6Fpf6FRTHKY5n/wcTSL+rNGu5j2wIQrzK3aN/7MNV+zD/djAPR3qI/yGxbi3syEVPKCGScf0bERrwWjIZOGIUtiS/u0WZeDrRHrvM+inCyeL7TUExAKg=
+  on:
+    tags: true
+    repo: nlibjs/stream-tap

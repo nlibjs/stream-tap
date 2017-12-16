@@ -1,7 +1,7 @@
 {
-  "name": "stream-gate",
+  "name": "@nlib/stream-tap",
   "version": "0.0.1",
-  "description": "Put gates in a stream pipeline.",
+  "description": "Put taps in a stream pipeline.",
   "author": {
     "name": "Kei Ito",
     "email": "kei.itof@gmail.com",
@@ -11,7 +11,7 @@
   "engines": {
     "node": ">=6"
   },
-  "repository": "kei-ito/stream-gate",
+  "repository": "nlibjs/stream-tap",
   "main": "src/index.js",
   "scripts": {
     "lint": "nlib-lint bin src test",
@@ -19,8 +19,7 @@
     "test_coverage": "nyc --reporter=lcov --reporter=text npm test"
   },
   "devDependencies": {
-    "@nlib/lint": "^2.0.0",
-    "@nlib/test": "^1.2.0",
-    "vinyl-fs": "^3.0.0"
+    "@nlib/lint": "^2.1.0",
+    "@nlib/test": "^1.2.0"
   }
 }
