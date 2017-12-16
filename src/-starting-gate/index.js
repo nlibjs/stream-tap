@@ -2,12 +2,14 @@ const TapGroup = require('../-tap-group');
 module.exports = class StartingGate extends TapGroup {
 
 	constructor() {
-		super({
+		const {turnOn} = super({
 			isRunning: false,
-			onFlush(tapGroup) {
-				tapGroup.turnOn();
+			onFlush() {
+				turnOn.call(this);
 			},
 		});
+		this.turnOn = undefined;
+		this.turnOff = undefined;
 	}
 
 };
