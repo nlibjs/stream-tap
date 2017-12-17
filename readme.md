@@ -176,7 +176,7 @@ Turn off the taps.
 
 ### StartingGate
 
-![starting gate animation](starting-gate.gif)
+![starting gate animation](images/starting-gate.gif)
 
 **StartingGate** is a sub class of TapGroup.
 It is turned on automatically when all streams before its taps flush all data.
