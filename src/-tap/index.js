@@ -19,7 +19,7 @@ module.exports = class Tap extends Transform {
 				[ON_FLUSH]: onFlush,
 			}
 		)
-		.on('pipe', ({_readableState: {objectMode}}) => {
+		.once('pipe', ({_readableState: {objectMode}}) => {
 			this._readableState.objectMode = objectMode;
 			this._writableState.objectMode = objectMode;
 		});
