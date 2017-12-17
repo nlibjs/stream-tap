@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Put taps in a stream pipeline.",
   "author": {
     "name": "Kei Ito",
