@@ -1,5 +1,8 @@
 {
   "name": "@nlib/stream-tap",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.1",
   "description": "Put taps in a stream pipeline.",
   "author": {
