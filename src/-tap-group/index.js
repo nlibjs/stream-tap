@@ -6,10 +6,11 @@ const TAPS = Symbol('taps');
 const FINISHED = Symbol('finished');
 const IS_RUNNING = Symbol('isRunning');
 const ON_FLUSH = Symbol('onFlush');
+const ON_DATA = Symbol('onData');
 
 module.exports = class TapGroup {
 
-	constructor({isRunning = false, onFlush = noop} = {}) {
+	constructor({isRunning = false, onFlush = noop, onData = noop} = {}) {
 		Object.assign(
 			this,
 			{
@@ -17,6 +18,7 @@ module.exports = class TapGroup {
 				[FINISHED]: new Set(),
 				[IS_RUNNING]: isRunning,
 				[ON_FLUSH]: onFlush,
+				[ON_DATA]: onData,
 			}
 		);
 	}
@@ -49,12 +51,16 @@ module.exports = class TapGroup {
 					this[ON_FLUSH](this);
 				}
 			},
+			onData: this[ON_DATA],
 		});
 		this[TAPS].add(tap);
 		return tap;
 	}
 
 	[TURN](state) {
+		if (this[IS_RUNNING] === state) {
+			return;
+		}
 		this[IS_RUNNING] = state;
 		if (state) {
 			for (const tap of this[TAPS]) {

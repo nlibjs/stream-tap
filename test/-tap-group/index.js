@@ -106,6 +106,11 @@ test('TapGroup', (test) => {
 			assert.deepEqual(passed1, data);
 			assert.deepEqual(passed2, data);
 		});
+		test('turnOn again', () => {
+			tapGroup.turnOn();
+			assert.deepEqual(passed1, data);
+			assert.deepEqual(passed2, data);
+		});
 	});
 
 	test('auto flush', (test) => {

@@ -2,6 +2,7 @@ const {Transform} = require('stream');
 const noop = () => {};
 
 const ON_FLUSH = Symbol('onFlush');
+const ON_DATA = Symbol('onData');
 const IS_RUNNING = Symbol('isRunning');
 const TURN = Symbol('turn');
 const FLUSH = Symbol('flush');
@@ -10,13 +11,14 @@ const FLUSH_CALLBACK = Symbol('flushCallback');
 
 module.exports = class Tap extends Transform {
 
-	constructor({isRunning = false, onFlush = noop} = {}) {
+	constructor({isRunning = false, onFlush = noop, onData = noop} = {}) {
 		Object.assign(
 			super(),
 			{
 				[BUFFER]: [],
 				[IS_RUNNING]: isRunning,
 				[ON_FLUSH]: onFlush,
+				[ON_DATA]: onData,
 			}
 		)
 		.once('pipe', ({_readableState: {objectMode}}) => {
@@ -34,10 +36,9 @@ module.exports = class Tap extends Transform {
 	}
 
 	_transform(chunk, encoding, callback) {
+		this[BUFFER].push(chunk);
 		if (this.isRunning) {
-			this.push(chunk);
-		} else {
-			this[BUFFER].push(chunk);
+			this[FLUSH]();
 		}
 		callback();
 	}
@@ -52,7 +53,9 @@ module.exports = class Tap extends Transform {
 
 	[FLUSH]() {
 		while (0 < this[BUFFER].length) {
-			this.push(this[BUFFER].shift());
+			const chunk = this[BUFFER].shift();
+			this[ON_DATA](chunk);
+			this.push(chunk);
 		}
 		if (this[FLUSH_CALLBACK]) {
 			this[FLUSH_CALLBACK]();

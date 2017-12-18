@@ -72,5 +72,15 @@ test('StartingGate', (test) => {
 			gate.put();
 		});
 	});
+	test('get passed data', () => {
+		assert.deepEqual(gate.data, [
+			data[0], data[1], data[2],
+			data[0], data[1], data[2],
+		]);
+	});
+	test('clear passed data', () => {
+		gate.clear();
+		assert.deepEqual(gate.data, []);
+	});
 
 });
