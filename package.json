@@ -22,7 +22,7 @@
     "test_coverage": "nyc --reporter=lcov --reporter=text npm test"
   },
   "devDependencies": {
-    "@nlib/lint": "^2.1.0",
+    "@nlib/lint": "^2.2.0",
     "@nlib/test": "^1.2.0"
   }
 }

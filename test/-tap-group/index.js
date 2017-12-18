@@ -35,9 +35,8 @@ test('TapGroup', (test) => {
 		.on('data', (chunk) => {
 			passed2.push(chunk);
 		});
-		const data = new Array(5).fill().map((x, index) => {
-			return Buffer.from(`${Date.now()}-${index}`);
-		});
+		const data = new Array(5).fill()
+		.map((x, index) => Buffer.from(`${Date.now()}-${index}`));
 		test('taps', () => {
 			assert.equal(tapGroup.taps.size, 2);
 		});
@@ -135,9 +134,8 @@ test('TapGroup', (test) => {
 		.on('data', (chunk) => {
 			passed2.push(chunk);
 		});
-		const data = new Array(5).fill().map((x, index) => {
-			return Buffer.from(`${Date.now()}-${index}`);
-		});
+		const data = new Array(5).fill()
+		.map((x, index) => Buffer.from(`${Date.now()}-${index}`));
 		test('0', () => {
 			source1.write(data[0]);
 			source2.write(data[0]);

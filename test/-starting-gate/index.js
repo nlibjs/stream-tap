@@ -20,9 +20,7 @@ test('StartingGate', (test) => {
 	.on('data', (chunk) => {
 		passed2.push(chunk);
 	});
-	const data = new Array(3).fill().map((x, index) => {
-		return Buffer.from(`${Date.now()}-${index}`);
-	});
+	const data = new Array(3).fill().map((x, index) => Buffer.from(`${Date.now()}-${index}`));
 	test('fail to turn on', () => {
 		assert.throws(() => {
 			gate.turnOn();

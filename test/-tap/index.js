@@ -32,9 +32,8 @@ test('Tap', (test) => {
 		.once('end', () => {
 			ended = true;
 		});
-		const data = new Array(5).fill().map((x, index) => {
-			return Buffer.from(`${Date.now()}-${index}`);
-		});
+		const data = new Array(5).fill()
+		.map((x, index) => Buffer.from(`${Date.now()}-${index}`));
 		test('0', () => {
 			source.write(data[0]);
 			assert.deepEqual(passed, data.slice(0, 1));
@@ -107,9 +106,8 @@ test('Tap', (test) => {
 		.once('end', () => {
 			ended = true;
 		});
-		const data = new Array(5).fill().map((x, index) => {
-			return Buffer.from(`${Date.now()}-${index}`);
-		});
+		const data = new Array(5).fill()
+		.map((x, index) => Buffer.from(`${Date.now()}-${index}`));
 		test('0', () => {
 			source.write(data[0]);
 			assert.deepEqual(passed, data.slice(0, 1));
