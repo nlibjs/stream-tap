@@ -1,3 +1,4 @@
+const EventEmitter = require('events');
 const Tap = require('../-tap');
 const noop = () => {};
 
@@ -7,11 +8,11 @@ const FINISHED = Symbol('finished');
 const IS_RUNNING = Symbol('isRunning');
 const ON_FLUSH = Symbol('onFlush');
 
-module.exports = class TapGroup {
+module.exports = class TapGroup extends EventEmitter {
 
 	constructor({isRunning = false, onFlush = noop} = {}) {
 		Object.assign(
-			this,
+			super(),
 			{
 				[TAPS]: new Set(),
 				[FINISHED]: new Set(),
@@ -49,6 +50,9 @@ module.exports = class TapGroup {
 					this[ON_FLUSH](this);
 				}
 			},
+		})
+		.once('error', (error) => {
+			this.destroy(error);
 		});
 		this[TAPS].add(tap);
 		return tap;
@@ -79,10 +83,16 @@ module.exports = class TapGroup {
 	}
 
 	destroy(error) {
+		if (this._destroyed) {
+			return;
+		}
+		this._destroyed = true;
+		this.emit('error', error);
 		for (const tap of this[TAPS]) {
 			if (tap.destroy) {
 				tap.destroy(error);
 			} else {
+				tap.end();
 				tap.emit('error', error);
 			}
 		}
