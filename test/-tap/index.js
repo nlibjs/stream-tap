@@ -177,4 +177,21 @@ test('Tap', (test) => {
 		assert.deepEqual(passed, [data]);
 	});
 
+	test('work with objectMode', () => {
+		const source = new PassThrough({objectMode: true});
+		const passed = [];
+		const tap = new Tap();
+		source
+		.pipe(tap)
+		.on('data', (chunk) => {
+			passed.push(chunk);
+		});
+		const data = {value: Date.now()};
+		source.write(data);
+		source.end(data);
+		assert.deepEqual(passed, []);
+		tap.turnOn();
+		assert.deepEqual(passed, [data, data]);
+	});
+
 });

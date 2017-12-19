@@ -15,17 +15,17 @@ module.exports = class Tap extends Transform {
 		onFlush = noop,
 	} = {}) {
 		Object.assign(
-			super(),
+			super()
+			.once('pipe', ({_readableState: {objectMode}}) => {
+				this._readableState.objectMode = objectMode;
+				this._writableState.objectMode = objectMode;
+			}),
 			{
 				[BUFFER]: [],
 				[IS_RUNNING]: isRunning,
 				[ON_FLUSH]: onFlush,
 			}
-		)
-		.once('pipe', ({_readableState: {objectMode}}) => {
-			this._readableState.objectMode = objectMode;
-			this._writableState.objectMode = objectMode;
-		});
+		);
 	}
 
 	get isRunning() {
