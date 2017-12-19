@@ -6,11 +6,10 @@ const TAPS = Symbol('taps');
 const FINISHED = Symbol('finished');
 const IS_RUNNING = Symbol('isRunning');
 const ON_FLUSH = Symbol('onFlush');
-const ON_DATA = Symbol('onData');
 
 module.exports = class TapGroup {
 
-	constructor({isRunning = false, onFlush = noop, onData = noop} = {}) {
+	constructor({isRunning = false, onFlush = noop} = {}) {
 		Object.assign(
 			this,
 			{
@@ -18,7 +17,6 @@ module.exports = class TapGroup {
 				[FINISHED]: new Set(),
 				[IS_RUNNING]: isRunning,
 				[ON_FLUSH]: onFlush,
-				[ON_DATA]: onData,
 			}
 		);
 	}
@@ -39,7 +37,7 @@ module.exports = class TapGroup {
 		return 0 < tapCount && finishedTapCount === tapCount;
 	}
 
-	put() {
+	put(onData = noop) {
 		if (this.receivesNoMoreData) {
 			throw new Error('This tap group is closed.');
 		}
@@ -51,7 +49,7 @@ module.exports = class TapGroup {
 					this[ON_FLUSH](this);
 				}
 			},
-			onData: this[ON_DATA],
+			onData,
 		});
 		this[TAPS].add(tap);
 		return tap;
