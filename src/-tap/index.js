@@ -1,6 +1,6 @@
 const {Transform} = require('stream');
-const noop = () => {};
 
+const noop = () => {};
 const ON_FLUSH = Symbol('onFlush');
 const ON_DATA = Symbol('onData');
 const IS_RUNNING = Symbol('isRunning');
@@ -11,7 +11,11 @@ const FLUSH_CALLBACK = Symbol('flushCallback');
 
 module.exports = class Tap extends Transform {
 
-	constructor({isRunning = false, onFlush = noop, onData = noop} = {}) {
+	constructor({
+		isRunning = false,
+		onFlush = noop,
+		onData = noop,
+	} = {}) {
 		Object.assign(
 			super(),
 			{

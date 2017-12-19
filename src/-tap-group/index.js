@@ -37,7 +37,7 @@ module.exports = class TapGroup {
 		return 0 < tapCount && finishedTapCount === tapCount;
 	}
 
-	put(onData = noop) {
+	put({onData = noop} = {}) {
 		if (this.receivesNoMoreData) {
 			throw new Error('This tap group is closed.');
 		}
