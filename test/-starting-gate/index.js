@@ -20,7 +20,8 @@ test('StartingGate', (test) => {
 	.on('data', (chunk) => {
 		passed2.push(chunk);
 	});
-	const data = new Array(3).fill().map((x, index) => Buffer.from(`${Date.now()}-${index}`));
+	const data = new Array(3).fill()
+	.map((x, index) => Buffer.from(`${Date.now()}-${index}`));
 	test('fail to turn on', () => {
 		assert.throws(() => {
 			gate.turnOn();
@@ -69,16 +70,6 @@ test('StartingGate', (test) => {
 		assert.throws(() => {
 			gate.put();
 		});
-	});
-	test('get passed data', () => {
-		assert.deepEqual(gate.data, [
-			data[0], data[1], data[2],
-			data[0], data[1], data[2],
-		]);
-	});
-	test('clear passed data', () => {
-		gate.clear();
-		assert.deepEqual(gate.data, []);
 	});
 
 });
