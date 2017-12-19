@@ -80,7 +80,11 @@ module.exports = class TapGroup {
 
 	destroy(error) {
 		for (const tap of this[TAPS]) {
-			tap.destroy(error);
+			if (tap.destroy) {
+				tap.destroy(error);
+			} else {
+				tap.emit('error', error);
+			}
 		}
 	}
 
