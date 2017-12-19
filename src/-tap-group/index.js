@@ -37,7 +37,7 @@ module.exports = class TapGroup {
 		return 0 < tapCount && finishedTapCount === tapCount;
 	}
 
-	put({onData = noop} = {}) {
+	put() {
 		if (this.receivesNoMoreData) {
 			throw new Error('This tap group is closed.');
 		}
@@ -49,7 +49,6 @@ module.exports = class TapGroup {
 					this[ON_FLUSH](this);
 				}
 			},
-			onData,
 		});
 		this[TAPS].add(tap);
 		return tap;
@@ -77,6 +76,12 @@ module.exports = class TapGroup {
 
 	turnOff() {
 		this[TURN](false);
+	}
+
+	destroy(error) {
+		for (const tap of this[TAPS]) {
+			tap.destroy(error);
+		}
 	}
 
 };

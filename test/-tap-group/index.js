@@ -229,4 +229,37 @@ test('TapGroup', (test) => {
 		assert.deepEqual(passed2, [data]);
 	});
 
+	test('destroy', () => {
+		const source1 = new PassThrough();
+		const source2 = new PassThrough();
+		const passed1 = [];
+		const passed2 = [];
+		const tapGroup = new TapGroup();
+		source1
+		.pipe(tapGroup.put())
+		.on('data', (chunk) => {
+			passed1.push(chunk);
+		});
+		source2
+		.pipe(tapGroup.put())
+		.on('data', (chunk) => {
+			passed2.push(chunk);
+		});
+		const data = Buffer.from(`${Date.now()}`);
+		source1.write(data);
+		source2.write(data);
+		assert.deepEqual(passed1, []);
+		assert.deepEqual(passed2, []);
+		tapGroup.turnOn();
+		assert.deepEqual(passed1, [data]);
+		assert.deepEqual(passed2, [data]);
+		tapGroup.destroy();
+		assert.throws(() => {
+			source1.write(data);
+		});
+		assert.throws(() => {
+			source2.write(data);
+		});
+	});
+
 });
